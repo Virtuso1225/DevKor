@@ -1,22 +1,25 @@
-import Header from '@/components/custom/Header'
+import MainLayout from '@/components/custom/MainLayout'
+import Home from '@/pages/Home'
+import Todo from '@/pages/TodoPage'
 import type { RouteObject } from 'react-router-dom'
 
 const routes: RouteObject[] = [
   {
     path: '',
-    element: <Header />,
+    element: <MainLayout />,
     children: [
       {
         path: '',
-        element: <div>Home</div>
+        element: <Home />
       },
       {
-        path: 'about',
-        element: <div>About</div>
-      },
-      {
-        path: 'contact',
-        element: <div>Contact</div>
+        path: '',
+        children: [
+          {
+            path: 'todo',
+            element: <Todo />
+          }
+        ]
       }
     ]
   }

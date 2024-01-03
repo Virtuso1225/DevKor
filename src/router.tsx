@@ -1,4 +1,4 @@
-import routes from './router/Router'
-// import OptimizedRouter from './router/OptimizedRouter'
+// import routes from './router/Router'
+import routes from './router/OptimizedRouter'
 
 export { routes }

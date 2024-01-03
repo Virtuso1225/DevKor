@@ -1,0 +1,128 @@
+<div class="col-xs-12 col-md-12" id="printme">
+<div class="row">
+
+ <?php
+ //checkAdmin(0);
+if(isset($_POST['submit'])) {
+     $save_dir = "/var/www/html/excel/";
+     //파일이 HTTP POST 방식을 통해 정상적으로 업로드되었는지 확인한다.
+     if(is_uploaded_file($_FILES["upload_file"]["tmp_name"])){
+          echo "업로드한 파일명 : " . $_FILES["upload_file"]["name"];
+          //파일을 저장할 디렉토리 및 파일명
+          $dest = $save_dir . $_FILES["upload_file"]["name"];
+          //파일을 지정한 디렉토리에 저장
+          if(move_uploaded_file($_FILES["upload_file"]["tmp_name"], $dest))
+               echo "   업로드 성공";
+          else
+               die("fail2");
+     } else {
+          echo "엑셀 파일을 선택해 주세요.";
+     }
+}
+
+?>
+
+<form enctype="multipart/form-data" method="post" style="<?php if($my['uid']!=1){ echo 'display:none';} ?>">
+     <input type="file" name="upload_file" /><br /> 
+	
+	 <div class='control-group'>
+					<div class='controls'>
+					  <button type='submit' value="upload" name="submit" class='btn btn-success'>Upload</button>
+					  <a class='btn btn-success' >Cancel</a>
+					</div>
+	</div>
+</form>
+
+<br></br>
+                      <i class='glyphicon glyphicon-list'></i><b>&nbsp;일반교양과정</b><br><br>
+
+<?php
+
+    //error_reporting(E_ALL);
+    require_once '/var/www/html/PHPExcel_1.8.0_doc/Classes/PHPExcel.php';
+    require_once '/var/www/html/PHPExcel_1.8.0_doc/Classes/PHPExcel/IOFactory.php';
+	$objPHPExcel = new PHPExcel();
+
+    $filename = '/var/www/html/excel/corse.xlsx';
+	//$_FILES['upload_file']['tmp_name']; // 업로드 된 파일
+
+    try {
+        // 업로드 된 엑셀 형식에 맞는 Reader객체를 만든다.
+        $objReader = PHPExcel_IOFactory::createReaderForFile($filename);
+        // 읽기전용으로 설정
+        $objReader->setReadDataOnly(true);
+        // 엑셀파일을 읽는다
+        $objExcel = $objReader->load($filename);
+        // 첫번째 시트를 선택
+        $objExcel->setActiveSheetIndex(0);
+        $objWorksheet = $objExcel->getActiveSheet();
+?>
+ <table class="table table-bordered" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<tbody>
+<tr align="center" class="danger">
+		<td height="23" class="deg_line2">과정명</td>
+		<td width="100" height="23" class="deg_line2">강의시간</td>
+		<td width="100" height="23" class="deg_line2">수강료</td>
+		<td width="100" height="23" class="deg_line2">강사</td>
+		<td width="100" height="23" class="deg_line2">기간</td>
+		<td width="100" height="23" class="deg_line2">과정소개 및<br> 수강신청</td>     
+		</tr>
+
+<?php
+$maxRow = $objWorksheet->getHighestRow();
+for ($i = 2 ; $i <= $maxRow ; $i++){ // 두번째 행부터 읽는다
+    $class = $objWorksheet->getCell('A' . $i)->getValue(); // 첫번째 열
+    $time = $objWorksheet->getCell('B' . $i)->getValue(); // 두번째 열
+    $pay = $objWorksheet->getCell('C' . $i)->getValue(); // 세번째 열
+	$master = $objWorksheet->getCell('D' . $i)->getValue(); // 네번째 열
+	$period = $objWorksheet->getCell('E' . $i)->getValue(); // 다섯번째 열
+	$page = $objWorksheet->getCell('F' . $i)->getValue(); // 여섯번째 열
+        $menu = $objWorksheet->getCell('G' . $i)->getValue(); // 일곱번째 열
+        if($menu == '예술') {
+
+	?>
+		<tr bgcolor="#ffffff" align="center">
+		<td height="23"><?php echo $class; ?></td>
+                <td><?php echo $time; ?></td>
+		<td><?php echo $pay; ?></td>
+		<td><?php echo $master; ?></td>
+                <td><?php echo $period; ?></td>
+		<td class="edu"><a href="<?php echo $page; ?>"><button type="button" class="btn btn-success">바로가기</button></a></td>                      
+		</tr>
+<?php
+    }
+    }
+	}   catch (exception $e) {
+        echo '엑셀파일을 읽는도중 오류가 발생하였습니다.'; 
+	}
+?>
+		</tbody>
+		</table>
+</div>
+</div>
+<br>
+<div align="right">
+<div class='controls'>
+		<button type='submit' value="print" name="submit" class='btn btn-success' onclick="javascript:content_print();">Print</button>
+</div>
+</div>
+
+
+<script type="text/javascript">
+function content_print(){
+    
+                var initBody = document.body.innerHTML;
+                window.onbeforeprint = function(){
+                    document.body.innerHTML = document.getElementById('printme').innerHTML;
+                }
+                window.onafterprint = function(){
+                    document.body.innerHTML = initBody;
+                }
+                window.print();     
+            }            
+</script>
+
+<style>
+@page a4sheet{size:21.0cm 29.7cm}
+.a4{page:a4sheet; page-break-after:always}
+</style>
