@@ -1,11 +1,6 @@
-import LazyLoader from '@/components/custom/LazyLoader'
-import { lazy } from 'react'
+import { Home, MainLayout, TodoQueryPage } from '@/router/LazyPages'
 import type { RouteObject } from 'react-router-dom'
 
-const MainLayout = LazyLoader(lazy(() => import('@/components/custom/MainLayout')))
-const Home = LazyLoader(lazy(() => import('@/pages/Home')))
-const Todo = LazyLoader(lazy(() => import('@/pages/TodoPage')))
-const TodoQueryPage = LazyLoader(lazy(() => import('@/pages/TodoQueryPage')))
 const routes: RouteObject[] = [
   {
     path: '',

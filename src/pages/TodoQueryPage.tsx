@@ -3,6 +3,7 @@ import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
+
 import { useMemo, useState } from 'react'
 
 const TodoQueryPage = () => {
@@ -11,7 +12,7 @@ const TodoQueryPage = () => {
   const [newTodo, setNewTodo] = useState('')
   const response = useGetToDoList().data
   const todoList = useMemo(() => response ?? [], [response])
-  const { mutateAsync: mutateTodo } = usePostTodo()
+  const { mutate: mutateTodo } = usePostTodo()
   const { mutate: mutateCheck } = usePatchTodoCheck()
   const { mutate: mutateDelete } = useDeleteTodo()
 
@@ -21,16 +22,13 @@ const TodoQueryPage = () => {
       : 0
   }
   const progress = useMemo(setProgress, [todoList])
-
   const handleAddTodo = () => {
     if (newTodo === '') {
       setPlaceholderText('일을 작성해야합니다!!!')
       setBorderColor('#FF5F57')
       return
     }
-    mutateTodo(newTodo).then(() => {
-      setNewTodo('')
-    })
+    mutateTodo(newTodo, { onSuccess: () => setNewTodo('') })
     setPlaceholderText('할 일을 작성해보세요!')
     setBorderColor('#DADADA')
   }

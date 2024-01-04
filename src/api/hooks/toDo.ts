@@ -1,13 +1,21 @@
+import { toast } from '@/components/ui/use-toast'
+import { COMMON_MESSAGES, TODO_MESSAGES } from '@/data/messages'
 import type { ToDo } from '@/models/todo'
-import { type UseMutationResult, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios, { Axios, type AxiosError, type AxiosResponse } from 'axios'
+import {
+  type UseMutationResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult
+} from '@tanstack/react-query'
+import axios, { AxiosError, type AxiosResponse } from 'axios'
 export const getToDoList = async () => {
   const response = await axios.get<ToDo[]>('http://localhost:8080/todo/lists')
   return response.data
 }
 
-export const useGetToDoList = () => {
-  return useQuery<ToDo[]>({ queryKey: ['todoList'], queryFn: getToDoList })
+export const useGetToDoList = (): UseQueryResult<ToDo[], Error> => {
+  return useQuery<ToDo[]>({ queryKey: ['todoList'], queryFn: getToDoList, throwOnError: true })
 }
 
 export const postTodo = async (content: string) => {
@@ -28,9 +36,15 @@ export const usePostTodo = (): UseMutationResult<null, AxiosError, string> => {
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
+      toast({ title: TODO_MESSAGES.CREATE_SUCCESS })
     },
     onError: error => {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        const errorMessage = TODO_MESSAGES.CREATE_FAILED
+        toast({ variant: 'destructive', title: errorMessage })
+      } else {
+        toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
+      }
     }
   })
 }
@@ -41,24 +55,30 @@ interface PatchTodoRequest {
 }
 
 export const patchTodoCheck = async ({ id, isChecked }: PatchTodoRequest) => {
-  const response = await axios.patch<null, AxiosResponse<null>, { isChecked: 0 | 1 }>(
+  const response = await axios.patch<null, AxiosResponse<number>, Pick<PatchTodoRequest, 'isChecked'>>(
     `http://localhost:8080/todo/update/${id}`,
     { isChecked }
   )
   return response.data
 }
 
-export const usePatchTodoCheck = (): UseMutationResult<null, AxiosError, PatchTodoRequest> => {
+export const usePatchTodoCheck = (): UseMutationResult<number, AxiosError, PatchTodoRequest> => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: patchTodoCheck,
-    onSuccess: () => {
+    onSuccess: data => {
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
+      toast({ title: data === 1 ? TODO_MESSAGES.CHECK_SUCCESS : TODO_MESSAGES.UNCHECK_SUCCESS })
     },
     onError: error => {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        const errorMessage = TODO_MESSAGES.UPDATE_FAILED
+        toast({ variant: 'destructive', title: errorMessage })
+      } else {
+        toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
+      }
     }
   })
 }
@@ -76,9 +96,15 @@ export const useDeleteTodo = (): UseMutationResult<null, AxiosError, number> => 
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
+      toast({ title: TODO_MESSAGES.DELETE_SUCCESS })
     },
     onError: error => {
-      console.log(error)
+      if (error instanceof AxiosError) {
+        const errorMessage = TODO_MESSAGES.DELETE_FAILED
+        toast({ variant: 'destructive', title: errorMessage })
+      } else {
+        toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
+      }
     }
   })
 }
