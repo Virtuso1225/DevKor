@@ -18,11 +18,16 @@ const Header = () => {
           ToDo
         </div>
       </Link>
-      <Button variant="ghost">
-        <Link to="https://github.com/DevKor-github">
-          <GitHubLogoIcon className="size-[20px]" />
-        </Link>
-      </Button>
+      <div className="flex flex-row items-center justify-center gap-[10px]">
+        <Button>
+          <Link to="/login">로그인</Link>
+        </Button>
+        <Button variant="ghost">
+          <Link to="https://github.com/DevKor-github">
+            <GitHubLogoIcon className="size-[20px]" />
+          </Link>
+        </Button>
+      </div>
     </div>
   )
 }

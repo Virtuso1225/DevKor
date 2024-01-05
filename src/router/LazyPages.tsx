@@ -5,3 +5,4 @@ export const MainLayout = LazyLoader(lazy(() => import('@/components/custom/Main
 export const Home = LazyLoader(lazy(() => import('@/pages/Home')))
 export const Todo = LazyLoader(lazy(() => import('@/pages/TodoPage')))
 export const TodoQueryPage = LazyLoader(lazy(() => import('@/pages/TodoQueryPage')))
+export const LoginPage = LazyLoader(lazy(() => import('@/pages/LoginPage')))

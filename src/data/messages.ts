@@ -13,3 +13,11 @@ export const TODO_MESSAGES = {
   DELETE_FAILED: 'TODO 삭제에 실패했습니다.',
   SERVER_ERROR: '서버 에러가 발생했습니다. 다시 시도해주세요.'
 }
+
+export const AUTH_MESSAGES = {
+  LOGIN_SUCCESS: '로그인 성공!!',
+  LOGIN_FAILED: '아이디 또는 비밀번호가 일치하지 않습니다.',
+  LOGOUT_SUCCESS: '로그아웃 성공',
+  LOGOUT_FAILED: '로그아웃 실패',
+  SERVER_ERROR: '서버 에러가 발생했습니다. 다시 시도해주세요.'
+}

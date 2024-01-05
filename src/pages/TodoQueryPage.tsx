@@ -42,7 +42,7 @@ const TodoQueryPage = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center p-10">
+    <div className="flex flex-col justify-center items-center mt-[40px]">
       <div className="flex flex-col justify-center items-center gap-[20px]">
         <div className="flex w-[393px] justify-center items-center rounded-[10px] shadow border py-[15px]">
           <h4 className="text-xl font-bold">TODO LIST</h4>

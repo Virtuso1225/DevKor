@@ -1,4 +1,5 @@
-import { Home, MainLayout, TodoQueryPage } from '@/router/LazyPages'
+import AuthPath from '@/router/AuthPath'
+import { Home, LoginPage, MainLayout, TodoQueryPage } from '@/router/LazyPages'
 import type { RouteObject } from 'react-router-dom'
 
 const routes: RouteObject[] = [
@@ -10,14 +11,23 @@ const routes: RouteObject[] = [
         path: '',
         element: <Home />
       },
+      // {
+      //   path: 'todo',
+      //   element: <TodoQueryPage />
+      // },
       {
         path: '',
+        element: <AuthPath />,
         children: [
           {
             path: 'todo',
             element: <TodoQueryPage />
           }
         ]
+      },
+      {
+        path: 'login',
+        element: <LoginPage />
       }
     ]
   }
