@@ -1,32 +1,27 @@
-import { Toaster } from '@/components/ui/toaster'
-import { toast } from '@/components/ui/use-toast'
-import { COMMON_MESSAGES } from '@/data/messages'
-import { routes } from '@/router'
-import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
-import { useRoutes } from 'react-router-dom'
-import { RecoilRoot } from 'recoil'
+import { useSilentRefresh } from '@/api/hooks/refresh'
 
-const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: err => {
-      if (err instanceof AxiosError) {
-        toast({ variant: 'destructive', title: err.message })
-      } else {
-        toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
-      }
-    }
-  })
-})
+import { getRefreshToken } from '@/lib/auth/cookies'
+import { isAuthenticated } from '@/recoil/atom'
+import { routes } from '@/router'
+import { useEffect } from 'react'
+import { useRoutes } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 
 function App() {
+  const isAuth = useRecoilValue(isAuthenticated)
+  const { mutate: silentRefreshMutation } = useSilentRefresh()
+
+  const handleRefresh = async () => {
+    if (!isAuth && localStorage.getItem('isLoggedIn') === 'true') {
+      silentRefreshMutation(getRefreshToken())
+    }
+  }
+  useEffect(() => {
+    handleRefresh()
+  }, [])
   const content = useRoutes(routes)
-  return (
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>{content}</RecoilRoot>
-      <Toaster />
-    </QueryClientProvider>
-  )
+
+  return <>{content}</>
 }
 
 export default App

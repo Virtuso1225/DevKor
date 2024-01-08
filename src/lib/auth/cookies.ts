@@ -8,13 +8,11 @@ export const setRefreshToken = (refreshToken: string) => {
 
   return cookies.set('refreshToken', refreshToken, {
     path: '/',
-    expires: new Date(expireDate),
-    httpOnly: true,
-    secure: true
+    expires: new Date(expireDate)
   })
 }
 
-export const getRefreshToken = () => {
+export const getRefreshToken = (): string => {
   return cookies.get('refreshToken')
 }
 
