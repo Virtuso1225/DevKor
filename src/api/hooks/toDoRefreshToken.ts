@@ -10,7 +10,7 @@ import {
   useQueryClient,
   type UseQueryResult
 } from '@tanstack/react-query'
-import axios, { AxiosError, type AxiosResponse } from 'axios'
+import { AxiosError, type AxiosResponse } from 'axios'
 import { useRecoilValue } from 'recoil'
 export const getToDoList = async () => {
   const response = await API.get<ToDo[]>('/todo/secure/lists')
@@ -27,7 +27,7 @@ export const useGetToDoList = (): UseQueryResult<ToDo[], Error> => {
 }
 
 export const postTodo = async (content: string) => {
-  const response = await axios.post<null, AxiosResponse<null>, { content: string }>('/todo/secure/create', {
+  const response = await API.post<null, AxiosResponse<null>, { content: string }>('/todo/secure/create', {
     content
   })
   return response.data
@@ -60,7 +60,7 @@ interface PatchTodoRequest {
 }
 
 export const patchTodoCheck = async ({ id, isChecked }: PatchTodoRequest) => {
-  const response = await axios.patch<null, AxiosResponse<number>, Pick<PatchTodoRequest, 'isChecked'>>(
+  const response = await API.patch<null, AxiosResponse<number>, Pick<PatchTodoRequest, 'isChecked'>>(
     `/todo/secure/update/${id}`,
     { isChecked }
   )
@@ -89,7 +89,7 @@ export const usePatchTodoCheck = (): UseMutationResult<number, AxiosError, Patch
 }
 
 export const deleteTodo = async (id: number) => {
-  const response = await axios.delete<null, AxiosResponse<null>, null>(`/todo/secure/delete/${id}`)
+  const response = await API.delete<null, AxiosResponse<null>, null>(`/todo/secure/delete/${id}`)
   return response.data
 }
 

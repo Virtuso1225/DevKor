@@ -8,6 +8,7 @@ import { formSchema } from '@/lib/formSchema'
 import { isAuthenticated } from '@/recoil/atom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
@@ -34,6 +35,9 @@ const LoginPage = () => {
   }, [])
   return (
     <div className="flex flex-col items-center mt-[40px]">
+      <Helmet>
+        <title>LoginPage</title>
+      </Helmet>
       <Card className="flex flex-col px-[50px] py-[30px]">
         <CardHeader className="flex items-center">
           <CardTitle>로그인</CardTitle>

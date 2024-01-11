@@ -13,7 +13,7 @@ export const useRefresh = async (config: AxiosRequestConfig) => {
       'http://localhost:8080/refresh',
       { refreshToken: refreshToken, username: localStorage.getItem('user') }
     )
-    config.headers!.Authorization = response.data.accessToken
+    // config.headers!.Authorization = response.data.accessToken
     API.defaults.headers.common['Authorization'] = response.data.accessToken
     localStorage.setItem('expiresAt', response.data.expiresAt.toString())
   }

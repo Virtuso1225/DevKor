@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 
 import { useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 const TodoQueryPage = () => {
   const [placeholderText, setPlaceholderText] = useState('할 일을 작성해보세요!')
@@ -43,6 +44,9 @@ const TodoQueryPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center mt-[40px]">
+      <Helmet>
+        <title>TodoQueryPage</title>
+      </Helmet>
       <div className="flex flex-col justify-center items-center gap-[20px]">
         <div className="flex w-[393px] justify-center items-center rounded-[10px] shadow border py-[15px]">
           <h4 className="text-xl font-bold">TODO LIST</h4>

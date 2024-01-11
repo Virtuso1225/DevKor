@@ -19,10 +19,6 @@ const routes: RouteObject[] = [
         path: '',
         element: <AuthPath />,
         children: [
-          // {
-          //   path: 'todo',
-          //   element: <TodoQueryPage />
-          // },
           {
             path: 'todo',
             element: <TodoRefreshPage />
