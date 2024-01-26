@@ -1,11 +1,11 @@
 import { getRefreshToken, removeRefreshToken } from '@/lib/auth/cookies'
-import axios, { type AxiosResponse, type AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { type AxiosResponse, AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import type { LoginResponse } from '@/api/types/auth'
 import API from '@/lib/auth/customApi'
 import { toast } from '@/components/ui/use-toast'
 import { COMMON_MESSAGES } from '@/data/messages'
 
-export const useRefresh = async (config: AxiosRequestConfig) => {
+export const useRefresh = async (config: InternalAxiosRequestConfig<any>) => {
   const refreshToken = getRefreshToken()
   const isTokenExpired = new Date(localStorage.getItem('expiresAt')!) < new Date()
   if (isTokenExpired) {

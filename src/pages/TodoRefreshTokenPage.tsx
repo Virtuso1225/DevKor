@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress'
 import { useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 
-const TodoQueryPage = () => {
+const TodoRefreshTokenPage = () => {
   const [placeholderText, setPlaceholderText] = useState('할 일을 작성해보세요!')
   const [borderColor, setBorderColor] = useState('#DADADA')
   const [newTodo, setNewTodo] = useState('')
@@ -45,7 +45,7 @@ const TodoQueryPage = () => {
   return (
     <div className="flex flex-col justify-center items-center mt-[40px]">
       <Helmet>
-        <title>TodoQueryPage</title>
+        <title>TodoRefreshTokenPage</title>
       </Helmet>
       <div className="flex flex-col justify-center items-center gap-[20px]">
         <div className="flex w-[393px] justify-center items-center rounded-[10px] shadow border py-[15px]">
@@ -89,4 +89,4 @@ const TodoQueryPage = () => {
   )
 }
 
-export default TodoQueryPage
+export default TodoRefreshTokenPage

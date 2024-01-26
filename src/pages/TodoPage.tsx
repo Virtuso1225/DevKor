@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import type { ToDo } from '@/models/todo'
 import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 
 const TodoPage = () => {
   const [todoList, setTodoList] = useState<ToDo[]>([])
@@ -41,6 +42,9 @@ const TodoPage = () => {
   }, [updated])
   return (
     <div className="flex flex-col justify-center items-center mt-[40px]">
+      <Helmet>
+        <title>TodoPage</title>
+      </Helmet>
       <div className="flex flex-col justify-center items-center gap-[20px]">
         <div className="flex w-[393px] justify-center items-center rounded-[10px] shadow border py-[15px]">
           <h4 className="text-xl font-bold">TODO LIST</h4>

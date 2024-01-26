@@ -1,5 +1,5 @@
 import AuthPath from '@/router/AuthPath'
-import { Home, LoginPage, MainLayout, TodoQueryPage, TodoRefreshPage } from '@/router/LazyPages'
+import { DummyPage, Home, LoginPage, MainLayout, TodoRefreshPage } from '@/router/LazyPages'
 import type { RouteObject } from 'react-router-dom'
 
 const routes: RouteObject[] = [
@@ -24,6 +24,10 @@ const routes: RouteObject[] = [
             element: <TodoRefreshPage />
           }
         ]
+      },
+      {
+        path: 'dummy',
+        element: <DummyPage />
       },
       {
         path: 'login',

@@ -7,6 +7,7 @@ import { useLogout } from '@/api/hooks/auth'
 const Header = () => {
   const location = useLocation()
   const isTodo = location.pathname === '/todo'
+  const isDummy = location.pathname === '/dummy'
   const isAuth = useRecoilValue(isAuthenticated)
   const { mutate: logoutMutation } = useLogout()
   return (
@@ -21,6 +22,15 @@ const Header = () => {
           } text-md font-medium font-['Inter'] leading-normal`}
         >
           ToDo
+        </div>
+      </Link>
+      <Link to="/dummy">
+        <div
+          className={`hover:text-gray-800 ${
+            isDummy ? `text-gray-900` : `text-gray-600`
+          } text-md font-medium font-['Inter'] leading-normal`}
+        >
+          Dummy
         </div>
       </Link>
       <div className="flex flex-row items-center justify-center gap-[10px]">
