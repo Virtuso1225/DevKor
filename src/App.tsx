@@ -11,7 +11,7 @@ function App() {
   const isAuth = useRecoilValue(isAuthenticated)
   const { mutate: silentRefreshMutation } = useSilentRefresh()
 
-  const handleRefresh = async () => {
+  const handleRefresh = () => {
     if (!isAuth && localStorage.getItem('isLoggedIn') === 'true') {
       silentRefreshMutation(getRefreshToken())
     }
