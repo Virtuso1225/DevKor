@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 const TodoRefreshTokenPage = () => {
@@ -12,18 +12,18 @@ const TodoRefreshTokenPage = () => {
   const [borderColor, setBorderColor] = useState('#DADADA')
   const [newTodo, setNewTodo] = useState('')
   const response = useGetToDoList().data
-  const todoList = useMemo(() => response ?? [], [response])
+  const todoList = response ?? []
   const { mutate: mutateTodo } = usePostTodo()
   const { mutate: mutateCheck } = usePatchTodoCheck()
   const { mutate: mutateDelete } = useDeleteTodo()
 
   const setProgress = () => {
     return todoList.length > 0
-      ? Math.floor((todoList.filter(todo => todo.isChecked).length / todoList.length) * 100)
+      ? Math.floor((todoList.filter(todo => todo.isChecked === 'true').length / todoList.length) * 100)
       : 0
   }
-  const progress = useMemo(setProgress, [todoList])
-  const handleAddTodo = () => {
+  const progress = setProgress()
+  const handleAddTodo = useCallback(() => {
     if (newTodo === '') {
       setPlaceholderText('일을 작성해야합니다!!!')
       setBorderColor('#FF5F57')
@@ -32,15 +32,22 @@ const TodoRefreshTokenPage = () => {
     mutateTodo(newTodo, { onSuccess: () => setNewTodo('') })
     setPlaceholderText('할 일을 작성해보세요!')
     setBorderColor('#DADADA')
-  }
-  const handleCheck = (id: number) => {
-    const current = todoList.find(todo => todo.id === id)?.isChecked ?? 0
-    mutateCheck({ id, isChecked: current === 0 ? 1 : 0 })
-  }
+  }, [newTodo, mutateTodo])
 
-  const handleDelete = (id: number) => {
-    mutateDelete(id)
-  }
+  const handleCheck = useCallback(
+    (id: number) => {
+      const current = todoList.find(todo => todo.id === id)?.isChecked === 'true' ?? false
+      mutateCheck({ id, isChecked: !current })
+    },
+    [todoList, mutateCheck]
+  )
+
+  const handleDelete = useCallback(
+    (id: number) => {
+      mutateDelete(id)
+    },
+    [mutateDelete]
+  )
 
   return (
     <div className="flex flex-col justify-center items-center mt-[40px]">
@@ -78,7 +85,7 @@ const TodoRefreshTokenPage = () => {
           <ToDoItem
             key={todo.id}
             id={todo.id}
-            isChecked={todo.isChecked}
+            isChecked={todo.isChecked === 'true'}
             content={todo.content}
             handlCheck={handleCheck}
             handleDelete={handleDelete}

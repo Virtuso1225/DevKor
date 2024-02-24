@@ -1,51 +1,43 @@
+import { axiosDelete, axiosGet, axiosPatch, axiosPost } from '@/api/hooks/https'
 import { toast } from '@/components/ui/use-toast'
 import { COMMON_MESSAGES, TODO_MESSAGES } from '@/data/messages'
-import API from '@/lib/auth/customApi'
 import type { ToDo } from '@/models/todo'
-import { authToken } from '@/recoil/atom'
-import {
-  type UseMutationResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-  type UseQueryResult
-} from '@tanstack/react-query'
-import { AxiosError, type AxiosResponse } from 'axios'
-import { useRecoilValue } from 'recoil'
+import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+
 export const getToDoList = async () => {
-  const response = await API.get<ToDo[]>('/todo/secure/lists')
-  return response.data
+  const response = await axiosGet<ToDo[]>('/todo/secure/lists')
+  return response.data.data
 }
 
 export const useGetToDoList = (): UseQueryResult<ToDo[], Error> => {
-  const accessToken = useRecoilValue(authToken)
   return useQuery<ToDo[]>({
-    queryKey: ['todoList', accessToken],
+    queryKey: ['todoList'],
     queryFn: getToDoList,
     throwOnError: true
   })
 }
 
 export const postTodo = async (content: string) => {
-  const response = await API.post<null, AxiosResponse<null>, { content: string }>('/todo/secure/create', {
+  const response = await axiosPost<{ content: string }, null>('/todo/secure/create', {
     content
   })
   return response.data
 }
 
-export const usePostTodo = (): UseMutationResult<null, AxiosError, string> => {
+export const usePostTodo = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: postTodo,
-    onSuccess: () => {
+    onSuccess: response => {
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
-      toast({ title: TODO_MESSAGES.CREATE_SUCCESS })
+      toast({ title: response.message })
     },
     onError: error => {
       if (error instanceof AxiosError) {
-        const errorMessage = TODO_MESSAGES.CREATE_FAILED
+        const errorMessage = error.response?.data?.message ?? TODO_MESSAGES.CREATE_FAILED
         toast({ variant: 'destructive', title: errorMessage })
       } else {
         toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
@@ -56,30 +48,29 @@ export const usePostTodo = (): UseMutationResult<null, AxiosError, string> => {
 
 interface PatchTodoRequest {
   id: number
-  isChecked: 0 | 1
+  isChecked: true | false
 }
 
 export const patchTodoCheck = async ({ id, isChecked }: PatchTodoRequest) => {
-  const response = await API.patch<null, AxiosResponse<number>, Pick<PatchTodoRequest, 'isChecked'>>(
-    `/todo/secure/update/${id}`,
-    { isChecked }
-  )
+  const response = await axiosPatch<Pick<PatchTodoRequest, 'isChecked'>, null>(`/todo/secure/update/${id}`, {
+    isChecked
+  })
   return response.data
 }
 
-export const usePatchTodoCheck = (): UseMutationResult<number, AxiosError, PatchTodoRequest> => {
+export const usePatchTodoCheck = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: patchTodoCheck,
-    onSuccess: data => {
+    onSuccess: response => {
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
-      toast({ title: data === 1 ? TODO_MESSAGES.CHECK_SUCCESS : TODO_MESSAGES.UNCHECK_SUCCESS })
+      toast({ title: response.message })
     },
     onError: error => {
       if (error instanceof AxiosError) {
-        const errorMessage = TODO_MESSAGES.UPDATE_FAILED
+        const errorMessage = error.response?.data?.message ?? TODO_MESSAGES.UPDATE_FAILED
         toast({ variant: 'destructive', title: errorMessage })
       } else {
         toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })
@@ -89,23 +80,23 @@ export const usePatchTodoCheck = (): UseMutationResult<number, AxiosError, Patch
 }
 
 export const deleteTodo = async (id: number) => {
-  const response = await API.delete<null, AxiosResponse<null>, null>(`/todo/secure/delete/${id}`)
+  const response = await axiosDelete<null>(`/todo/secure/delete/${id}`)
   return response.data
 }
 
-export const useDeleteTodo = (): UseMutationResult<null, AxiosError, number> => {
+export const useDeleteTodo = () => {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: deleteTodo,
-    onSuccess: () => {
+    onSuccess: response => {
       queryClient.invalidateQueries({
         queryKey: ['todoList']
       })
-      toast({ title: TODO_MESSAGES.DELETE_SUCCESS })
+      toast({ title: response.message })
     },
     onError: error => {
       if (error instanceof AxiosError) {
-        const errorMessage = TODO_MESSAGES.DELETE_FAILED
+        const errorMessage = error.response?.data?.message ?? TODO_MESSAGES.DELETE_FAILED
         toast({ variant: 'destructive', title: errorMessage })
       } else {
         toast({ variant: 'destructive', title: COMMON_MESSAGES.UNKOWN_ERROR })

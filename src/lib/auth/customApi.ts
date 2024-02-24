@@ -1,4 +1,3 @@
-import { handleRefreshError, useRefresh } from '@/lib/auth/refresh'
 import axios from 'axios'
 
 const API = axios.create({
@@ -7,6 +6,6 @@ const API = axios.create({
   headers: { 'Content-Type': 'application/json' }
 })
 
-API.interceptors.request.use(useRefresh, handleRefreshError)
+// API.interceptors.request.use(onRequest, handleRequestError)
 
 export default API

@@ -6,11 +6,7 @@ const ToDoItem = ({ id, isChecked, content, handlCheck, handleDelete }: ToDoCont
   return (
     <div className="flex flex-row w-[393px] justify-between items-center rounded-[10px] shadow border py-[15px] px-[32px]">
       <div className="flex flex-row justify-start items-center gap-[20px] ">
-        <Checkbox
-          checked={isChecked === 0 ? false : true}
-          className="border-[#DADADA] size-[20px]"
-          onClick={() => handlCheck(id)}
-        />
+        <Checkbox checked={isChecked} className="border-[#DADADA] size-[20px]" onClick={() => handlCheck(id)} />
         <p className="text-[15px] font-medium text-[#1E1E1E]">{content}</p>
       </div>
       <div

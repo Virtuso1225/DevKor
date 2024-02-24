@@ -5,16 +5,14 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { formSchema } from '@/lib/formSchema'
-import { isAuthenticated } from '@/recoil/atom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
 import type { z } from 'zod'
+
 const LoginPage = () => {
-  const isAuth = useRecoilValue(isAuthenticated)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,7 +27,7 @@ const LoginPage = () => {
   }
   const loaction = useLocation()
   useEffect(() => {
-    if (!isAuth && loaction.pathname === '/todo') {
+    if (!localStorage.getItem('accessToken') && loaction.pathname === '/todo') {
       toast({ variant: 'destructive', title: '로그인이 필요합니다.' })
     }
   }, [])

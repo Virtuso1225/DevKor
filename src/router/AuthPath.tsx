@@ -1,10 +1,13 @@
-import { isAuthenticated } from '@/recoil/atom'
+import { handleLoginStore } from '@/store/atom'
+import { useAtomValue } from 'jotai/react'
+import { loadable } from 'jotai/utils'
 import { Navigate, Outlet } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
 
 const AuthPath = () => {
-  const isAuth = useRecoilValue(isAuthenticated)
-  return isAuth ? <Outlet /> : <Navigate to="/login" />
+  // const isAuth = useRecoilValue(isAuthenticated)
+  const isLoggedIn = useAtomValue(loadable(handleLoginStore))
+  const test = localStorage.getItem('accessToken') !== null ? true : false
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" />
 }
 
 export default AuthPath

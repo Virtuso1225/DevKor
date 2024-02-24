@@ -76,7 +76,7 @@ const TodoPage = () => {
           <ToDoItem
             key={todo.id}
             id={todo.id}
-            isChecked={todo.isChecked}
+            isChecked={todo.isChecked === 'true'}
             content={todo.content}
             handlCheck={handleCheck}
             handleDelete={handleDelete}

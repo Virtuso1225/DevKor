@@ -1,14 +1,15 @@
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import { Link, useLocation } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
-import { isAuthenticated } from '@/recoil/atom'
 import { useLogout } from '@/api/hooks/auth'
+import { useAtomValue } from 'jotai/react'
+import { handleLoginStore } from '@/store/atom'
+
 const Header = () => {
   const location = useLocation()
   const isTodo = location.pathname === '/todo'
   const isDummy = location.pathname === '/dummy'
-  const isAuth = useRecoilValue(isAuthenticated)
+  const loginStatus = useAtomValue(handleLoginStore)
   const { mutate: logoutMutation } = useLogout()
   return (
     <div className="flex flex-row w-full h-[60px] items-center justify-between border-b border-slate-300 px-[100px]">
@@ -34,7 +35,7 @@ const Header = () => {
         </div>
       </Link>
       <div className="flex flex-row items-center justify-center gap-[10px]">
-        {isAuth ? (
+        {loginStatus ? (
           <Button onClick={() => logoutMutation()}>로그아웃</Button>
         ) : (
           <Button>

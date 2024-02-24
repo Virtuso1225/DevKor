@@ -1,9 +1,10 @@
 export interface ToDo {
   id: number
   content: string
-  isChecked: 1 | 0
+  isChecked: 'true' | 'false'
 }
-export interface ToDoContainerProps extends ToDo {
+export interface ToDoContainerProps extends Omit<ToDo, 'isChecked'> {
+  isChecked: boolean
   handlCheck: (id: number) => void
   handleDelete: (id: number) => void
 }
