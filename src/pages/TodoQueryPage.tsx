@@ -34,8 +34,8 @@ const TodoQueryPage = () => {
     setBorderColor('#DADADA')
   }
   const handleCheck = (id: number) => {
-    const current = todoList.find(todo => todo.id === id)?.isChecked ?? 0
-    mutateCheck({ id, isChecked: current === 0 ? 1 : 0 })
+    const current = todoList.find(todo => todo.id === id)?.isChecked ?? false
+    mutateCheck({ id, isChecked: current ? true : false })
   }
 
   const handleDelete = (id: number) => {
@@ -78,7 +78,7 @@ const TodoQueryPage = () => {
           <ToDoItem
             key={todo.id}
             id={todo.id}
-            isChecked={todo.isChecked === 'true'}
+            isChecked={todo.isChecked}
             content={todo.content}
             handlCheck={handleCheck}
             handleDelete={handleDelete}

@@ -1,8 +1,10 @@
+import { memo } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
 import type { ToDoContainerProps } from '@/models/todo'
 import { Cross1Icon } from '@radix-ui/react-icons'
 
-const ToDoItem = ({ id, isChecked, content, handlCheck, handleDelete }: ToDoContainerProps) => {
+const ToDoItem = memo(({ id, isChecked, content, handlCheck, handleDelete }: ToDoContainerProps) => {
+  console.log('rerennder')
   return (
     <div className="flex flex-row w-[393px] justify-between items-center rounded-[10px] shadow border py-[15px] px-[32px]">
       <div className="flex flex-row justify-start items-center gap-[20px] ">
@@ -17,6 +19,6 @@ const ToDoItem = ({ id, isChecked, content, handlCheck, handleDelete }: ToDoCont
       </div>
     </div>
   )
-}
+})
 
 export default ToDoItem

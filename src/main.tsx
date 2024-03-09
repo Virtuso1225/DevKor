@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui/toaster.tsx'
 import { AxiosError } from 'axios'
 import { COMMON_MESSAGES } from '@/data/messages.ts'
 import { toast } from '@/components/ui/use-toast.ts'
+import { StrictMode } from 'react'
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -23,16 +24,18 @@ const queryClient = new QueryClient({
 })
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <HelmetProvider>
-    {/* <React.StrictMode> */}
-    <CookiesProvider>
-      <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-          <App />
-          <Toaster />
-        </QueryClientProvider>
-      </BrowserRouter>
-    </CookiesProvider>
-    {/* </React.StrictMode> */}
-  </HelmetProvider>
+  <StrictMode>
+    <HelmetProvider>
+      {/* <React.StrictMode> */}
+      <CookiesProvider>
+        <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <App />
+            <Toaster />
+          </QueryClientProvider>
+        </BrowserRouter>
+      </CookiesProvider>
+      {/* </React.StrictMode> */}
+    </HelmetProvider>
+  </StrictMode>
 )

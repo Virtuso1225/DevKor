@@ -21,18 +21,18 @@ const TodoPage = () => {
       setBorderColor('#FF5F57')
       return
     }
-    postTodo(newTodo).then(() => setUpdated(!updated))
+    postTodo(newTodo).then(() => setUpdated(v => !v))
     setNewTodo('')
     setPlaceholderText('할 일을 작성해보세요!')
     setBorderColor('#DADADA')
   }
   const handleCheck = (id: number) => {
-    const current = todoList.find(todo => todo.id === id)?.isChecked ?? 0
-    patchTodoCheck({ id, isChecked: current === 0 ? 1 : 0 }).then(() => setUpdated(!updated))
+    const current = todoList.find(todo => todo.id === id)?.isChecked ?? false
+    patchTodoCheck({ id, isChecked: current ? false : true }).then(() => setUpdated(v => !v))
   }
-
+  //info: setState 함수의 호출 시점 값에 의존
   const handleDelete = (id: number) => {
-    deleteTodo(id).then(() => setUpdated(!updated))
+    deleteTodo(id).then(() => setUpdated(v => !v))
   }
   useEffect(() => {
     getToDoList().then(res => {
@@ -76,7 +76,7 @@ const TodoPage = () => {
           <ToDoItem
             key={todo.id}
             id={todo.id}
-            isChecked={todo.isChecked === 'true'}
+            isChecked={todo.isChecked}
             content={todo.content}
             handlCheck={handleCheck}
             handleDelete={handleDelete}

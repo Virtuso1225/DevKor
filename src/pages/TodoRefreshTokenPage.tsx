@@ -1,28 +1,24 @@
 import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/toDoRefreshToken'
+import ProgressBar from '@/components/custom/ProgressBar'
 import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Progress } from '@/components/ui/progress'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 const TodoRefreshTokenPage = () => {
   const [placeholderText, setPlaceholderText] = useState('할 일을 작성해보세요!')
   const [borderColor, setBorderColor] = useState('#DADADA')
   const [newTodo, setNewTodo] = useState('')
-  const response = useGetToDoList().data
-  const todoList = response ?? []
+  const todoList = useGetToDoList().data ?? []
   const { mutate: mutateTodo } = usePostTodo()
   const { mutate: mutateCheck } = usePatchTodoCheck()
   const { mutate: mutateDelete } = useDeleteTodo()
 
-  const setProgress = () => {
-    return todoList.length > 0
-      ? Math.floor((todoList.filter(todo => todo.isChecked === 'true').length / todoList.length) * 100)
-      : 0
-  }
-  const progress = setProgress()
+  const progress =
+    todoList.length > 0 ? Math.floor((todoList.filter(todo => todo.isChecked).length / todoList.length) * 100) : 0
+
   const handleAddTodo = useCallback(() => {
     if (newTodo === '') {
       setPlaceholderText('일을 작성해야합니다!!!')
@@ -34,13 +30,14 @@ const TodoRefreshTokenPage = () => {
     setBorderColor('#DADADA')
   }, [newTodo, mutateTodo])
 
-  const handleCheck = useCallback(
-    (id: number) => {
-      const current = todoList.find(todo => todo.id === id)?.isChecked === 'true' ?? false
-      mutateCheck({ id, isChecked: !current })
-    },
-    [todoList, mutateCheck]
-  )
+  const fn = (id: number) => {
+    const current = todoList.find(todo => todo.id === id)?.isChecked ?? false
+    mutateCheck({ id, isChecked: !current })
+  }
+
+  const ref = useRef(fn)
+  useLayoutEffect(() => void (ref.current = fn))
+  const handleCheck = useCallback((id: number) => ref.current(id), [])
 
   const handleDelete = useCallback(
     (id: number) => {
@@ -58,10 +55,7 @@ const TodoRefreshTokenPage = () => {
         <div className="flex w-[393px] justify-center items-center rounded-[10px] shadow border py-[15px]">
           <h4 className="text-xl font-bold">TODO LIST</h4>
         </div>
-        <div className="flex flex-row w-[393px] justify-center items-center gap-[20px]">
-          <Progress value={progress} className="flex" />
-          <p className="text-[15px] font-semibold	">{progress}%</p>
-        </div>
+        <ProgressBar progress={progress} />
         <div className="flex flex-row gap-[20px] w-[393px]">
           <Input
             className={`flex self-stretch justify-center items-center rounded-[10px] shadow border border-[${borderColor}]`}
@@ -85,7 +79,7 @@ const TodoRefreshTokenPage = () => {
           <ToDoItem
             key={todo.id}
             id={todo.id}
-            isChecked={todo.isChecked === 'true'}
+            isChecked={todo.isChecked}
             content={todo.content}
             handlCheck={handleCheck}
             handleDelete={handleDelete}

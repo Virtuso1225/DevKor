@@ -1,8 +1,8 @@
 import API from '@/lib/auth/customApi'
-import { handleRequestError, onRequest } from '@/lib/auth/onRequest'
+import { onRequest } from '@/lib/auth/onRequest'
 import { handleLoginStore } from '@/store/atom'
 import { useAtomValue } from 'jotai/react'
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 
 export const AxiosInterceptor = () => {
   //   const loginsStatus = useAtomValue(handleLoginState)

@@ -10,6 +10,7 @@ const Header = () => {
   const isTodo = location.pathname === '/todo'
   const isDummy = location.pathname === '/dummy'
   const loginStatus = useAtomValue(handleLoginStore)
+  console.log(loginStatus)
   const { mutate: logoutMutation } = useLogout()
   return (
     <div className="flex flex-row w-full h-[60px] items-center justify-between border-b border-slate-300 px-[100px]">

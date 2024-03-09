@@ -19,6 +19,7 @@ export const useGetToDoList = (): UseQueryResult<ToDo[], Error> => {
 }
 
 export const postTodo = async (content: string) => {
+  await sleep(2000)
   const response = await axios.post<null, AxiosResponse<null>, { content: string }>(
     'http://localhost:8080/todo/create',
     {
@@ -51,7 +52,11 @@ export const usePostTodo = (): UseMutationResult<null, AxiosError, string> => {
 
 interface PatchTodoRequest {
   id: number
-  isChecked: 0 | 1
+  isChecked: true | false
+}
+
+const sleep = async (offset: number) => {
+  return await new Promise(r => setTimeout(r, offset))
 }
 
 export const patchTodoCheck = async ({ id, isChecked }: PatchTodoRequest) => {
@@ -84,6 +89,7 @@ export const usePatchTodoCheck = (): UseMutationResult<number, AxiosError, Patch
 }
 
 export const deleteTodo = async (id: number) => {
+  await sleep(2000)
   const response = await axios.delete<null, AxiosResponse<null>, null>(`http://localhost:8080/todo/delete/${id}`)
   return response.data
 }
