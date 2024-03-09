@@ -1,16 +1,15 @@
 import { GitHubLogoIcon } from '@radix-ui/react-icons'
-import { Button } from '@/components/ui/button'
 import { Link, useLocation } from 'react-router-dom'
-import { useLogout } from '@/api/hooks/auth'
 import { useAtomValue } from 'jotai/react'
-import { handleLoginStore } from '@/store/atom'
+import { Button } from '@/components/ui/button'
+import { useLogout } from '@/api/hooks/auth'
+import { loginAtom } from '@/store/atom'
 
 const Header = () => {
   const location = useLocation()
   const isTodo = location.pathname === '/todo'
   const isDummy = location.pathname === '/dummy'
-  const loginStatus = useAtomValue(handleLoginStore)
-  console.log(loginStatus)
+  const loginStatus = useAtomValue(loginAtom)
   const { mutate: logoutMutation } = useLogout()
   return (
     <div className="flex flex-row w-full h-[60px] items-center justify-between border-b border-slate-300 px-[100px]">

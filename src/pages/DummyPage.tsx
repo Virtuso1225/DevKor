@@ -1,9 +1,9 @@
 // import { Card, CardContent } from '@/components/ui/card'
+import { Suspense, lazy } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Carousel, CarouselNext, CarouselPrevious } from '@/components/ui/carousel'
 import { Skeleton } from '@/components/ui/skeleton'
 // import { importAll } from '@/data/dummyImages'
-import { Suspense, lazy } from 'react'
-import { Helmet } from 'react-helmet-async'
 const CarouselCard = lazy(() => import('@/components/custom/CarouselCard'))
 
 const DummyPage = () => {

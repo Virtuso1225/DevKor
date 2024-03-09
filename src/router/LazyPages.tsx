@@ -1,5 +1,5 @@
-import LazyLoader from '@/components/custom/LazyLoader'
 import { lazy } from 'react'
+import LazyLoader from '@/components/custom/LazyLoader'
 const DummyPagePre = import('@/pages/DummyPage')
 // export const MainLayout = LazyLoader(lazy(() => import('@/components/custom/MainLayout')))
 export const Home = LazyLoader(lazy(() => import('@/pages/Home')))

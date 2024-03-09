@@ -1,11 +1,11 @@
-import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/toDo'
+import { useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/todo'
 import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 
-import { useMemo, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 
 const TodoQueryPage = () => {
   const [placeholderText, setPlaceholderText] = useState('할 일을 작성해보세요!')
@@ -80,7 +80,7 @@ const TodoQueryPage = () => {
             id={todo.id}
             isChecked={todo.isChecked}
             content={todo.content}
-            handlCheck={handleCheck}
+            handleCheck={handleCheck}
             handleDelete={handleDelete}
           />
         ))}

@@ -1,9 +1,9 @@
-import { axiosDelete, axiosGet, axiosPatch, axiosPost } from '@/api/hooks/https'
+import { AxiosError } from 'axios'
+import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
+import type { ToDo } from '@/models/todo'
 import { toast } from '@/components/ui/use-toast'
 import { COMMON_MESSAGES, TODO_MESSAGES } from '@/data/messages'
-import type { ToDo } from '@/models/todo'
-import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
+import { axiosDelete, axiosGet, axiosPatch, axiosPost } from '@/api/hooks/https'
 
 export const getToDoList = async () => {
   const response = await axiosGet<ToDo[]>('/todo/secure/lists')

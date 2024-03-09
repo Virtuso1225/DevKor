@@ -1,11 +1,11 @@
-import { deleteTodo, getToDoList, patchTodoCheck, postTodo } from '@/api/hooks/toDo'
+import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { deleteTodo, getToDoList, patchTodoCheck, postTodo } from '@/api/hooks/todo'
 import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Progress } from '@/components/ui/progress'
 import type { ToDo } from '@/models/todo'
-import { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
 
 const TodoPage = () => {
   const [todoList, setTodoList] = useState<ToDo[]>([])
@@ -78,7 +78,7 @@ const TodoPage = () => {
             id={todo.id}
             isChecked={todo.isChecked}
             content={todo.content}
-            handlCheck={handleCheck}
+            handleCheck={handleCheck}
             handleDelete={handleDelete}
           />
         ))}

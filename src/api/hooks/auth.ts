@@ -1,12 +1,12 @@
-import type { LoginRequest, LoginResponse } from '@/api/types/auth'
-import { toast } from '@/components/ui/use-toast'
-import { AUTH_MESSAGES, COMMON_MESSAGES } from '@/data/messages'
 import { useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { axiosPost } from '@/api/hooks/https'
 import { useSetAtom } from 'jotai/react'
-import { handleLoginStore } from '@/store/atom'
+import type { LoginRequest, LoginResponse } from '@/api/types/auth'
+import { toast } from '@/components/ui/use-toast'
+import { AUTH_MESSAGES, COMMON_MESSAGES } from '@/data/messages'
+import { axiosPost } from '@/api/hooks/https'
+import { loginAtom } from '@/store/atom'
 
 const login = async ({ username, password }: LoginRequest) => {
   const response = await axiosPost<LoginRequest, LoginResponse>('/login', { username, password })
@@ -14,7 +14,7 @@ const login = async ({ username, password }: LoginRequest) => {
 }
 export const useLogin = (username: string) => {
   const navigate = useNavigate()
-  const setLoginStorage = useSetAtom(handleLoginStore)
+  const setLoginStorage = useSetAtom(loginAtom)
   return useMutation({
     mutationFn: login,
     onSuccess: response => {
@@ -45,7 +45,7 @@ const logout = async () => {
 
 export const useLogout = () => {
   const navigate = useNavigate()
-  const setLoginStorage = useSetAtom(handleLoginStore)
+  const setLoginStorage = useSetAtom(loginAtom)
 
   return useMutation({
     mutationFn: logout,

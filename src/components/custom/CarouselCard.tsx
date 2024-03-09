@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { CarouselContent, CarouselItem } from '@/components/ui/carousel'
-import { importAll } from '@/data/dummyImages'
+import { importAll } from '@/data/dummy-images'
 // import { useEffect } from 'react'
 
 const CarouselCard = () => {

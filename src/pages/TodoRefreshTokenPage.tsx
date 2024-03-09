@@ -1,50 +1,39 @@
-import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/toDoRefreshToken'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/todo-refresh-token'
 import ProgressBar from '@/components/custom/ProgressBar'
 import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import useEvent from '@/lib/useEvent'
 
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
-import { Helmet } from 'react-helmet-async'
+type Status = 'empty' | 'warning';
+const config: Record<Status, { placeholder: string; color: string}> = {
+  'warning': { placeholder: '일을 작성해야합니다!!!', color: '#FF5F57' },
+  "empty": {placeholder: "할 일을 작성해보세요!", color: "#DADADA"}
+}
 
 const TodoRefreshTokenPage = () => {
-  const [placeholderText, setPlaceholderText] = useState('할 일을 작성해보세요!')
-  const [borderColor, setBorderColor] = useState('#DADADA')
   const [newTodo, setNewTodo] = useState('')
-  const todoList = useGetToDoList().data ?? []
+  const list = useGetToDoList().data ?? []
   const { mutate: mutateTodo } = usePostTodo()
   const { mutate: mutateCheck } = usePatchTodoCheck()
   const { mutate: mutateDelete } = useDeleteTodo()
+  const [status, setStatus] = useState<Status>('empty');
 
   const progress =
-    todoList.length > 0 ? Math.floor((todoList.filter(todo => todo.isChecked).length / todoList.length) * 100) : 0
+    list.length > 0 ? Math.floor((list.filter(todo => todo.isChecked).length / list.length) * 100) : 0
 
   const handleAddTodo = useCallback(() => {
-    if (newTodo === '') {
-      setPlaceholderText('일을 작성해야합니다!!!')
-      setBorderColor('#FF5F57')
-      return
-    }
-    mutateTodo(newTodo, { onSuccess: () => setNewTodo('') })
-    setPlaceholderText('할 일을 작성해보세요!')
-    setBorderColor('#DADADA')
+    if (newTodo === '') return setStatus('warning')
+    mutateTodo(newTodo, { onSuccess: () => { setNewTodo(''); setStatus('empty') } })
   }, [newTodo, mutateTodo])
 
-  const fn = (id: number) => {
-    const current = todoList.find(todo => todo.id === id)?.isChecked ?? false
+  const handleCheck = useEvent((id: number) => {
+    const current = list.find(todo => todo.id === id)?.isChecked ?? false
     mutateCheck({ id, isChecked: !current })
-  }
-
-  const ref = useRef(fn)
-  useLayoutEffect(() => void (ref.current = fn))
-  const handleCheck = useCallback((id: number) => ref.current(id), [])
-
-  const handleDelete = useCallback(
-    (id: number) => {
-      mutateDelete(id)
-    },
-    [mutateDelete]
-  )
+  });
+  const handleDelete = useCallback((id: number) => mutateDelete(id), [mutateDelete])
 
   return (
     <div className="flex flex-col justify-center items-center mt-[40px]">
@@ -58,9 +47,9 @@ const TodoRefreshTokenPage = () => {
         <ProgressBar progress={progress} />
         <div className="flex flex-row gap-[20px] w-[393px]">
           <Input
-            className={`flex self-stretch justify-center items-center rounded-[10px] shadow border border-[${borderColor}]`}
+            className={`flex self-stretch justify-center items-center rounded-[10px] shadow border border-[${config[status].color}]`}
             type="text"
-            placeholder={placeholderText}
+            placeholder={config[status].placeholder}
             value={newTodo}
             onChange={e => setNewTodo(e.target.value)}
             onKeyDown={e => e.nativeEvent.isComposing === false && e.key === 'Enter' && handleAddTodo()}
@@ -75,13 +64,13 @@ const TodoRefreshTokenPage = () => {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center gap-[10px] mt-[20px]">
-        {todoList.map(todo => (
+        {list.map(todo => (
           <ToDoItem
             key={todo.id}
             id={todo.id}
             isChecked={todo.isChecked}
             content={todo.content}
-            handlCheck={handleCheck}
+            handleCheck={handleCheck}
             handleDelete={handleDelete}
           />
         ))}

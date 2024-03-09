@@ -1,14 +1,13 @@
 import { atomWithStorage, createJSONStorage } from 'jotai/utils'
-import { atom } from 'jotai/vanilla'
 
-export interface AuthSate {
+export interface AuthState {
   isLoggedIn: boolean
   userName: string
   accessToken: string
   refreshToken: string
   expiresAt: Date
 }
-export const authAtom: AuthSate = {
+export const authState: AuthState = {
   isLoggedIn: false,
   userName: '',
   accessToken: '',
@@ -16,15 +15,8 @@ export const authAtom: AuthSate = {
   expiresAt: new Date()
 }
 
-export const loginStoraged = atomWithStorage<boolean>(
-  'loginState',
-  false,
-  createJSONStorage(() => localStorage),
-  { getOnInit: true }
+export const loginAtom = atomWithStorage<boolean>(
+  'loginState', false, createJSONStorage(() => localStorage), { getOnInit: true }
 )
-export const authState = atomWithStorage<AuthSate>('authState', authAtom)
+export const authAtom = atomWithStorage<AuthState>('authState', authState)
 
-export const handleLoginStore = atom(
-  get => get(loginStoraged),
-  (_get, set, update: boolean) => set(loginStoraged, update)
-)

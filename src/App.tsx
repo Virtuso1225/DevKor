@@ -1,11 +1,11 @@
-import { AxiosInterceptor } from '@/lib/AxiosInterceptor'
+import { useRoutes } from 'react-router-dom'
+import { useAxiosInterceptor } from '@/lib/useAxiosInterceptor'
 import { routes } from '@/router'
 
-import { useRoutes } from 'react-router-dom'
 
 function App() {
   const content = useRoutes(routes)
-  AxiosInterceptor()
+  useAxiosInterceptor()
   return <>{content}</>
 }
 

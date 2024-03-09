@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import { BrowserRouter } from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie'
+import { StrictMode } from 'react'
 import App from './App.tsx'
 import './index.css'
 import { QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -9,7 +10,6 @@ import { Toaster } from '@/components/ui/toaster.tsx'
 import { AxiosError } from 'axios'
 import { COMMON_MESSAGES } from '@/data/messages.ts'
 import { toast } from '@/components/ui/use-toast.ts'
-import { StrictMode } from 'react'
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({

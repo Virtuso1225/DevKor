@@ -1,7 +1,7 @@
+import type { RouteObject } from 'react-router-dom'
 import MainLayout from '@/components/custom/MainLayout'
 import AuthPath from '@/router/AuthPath'
 import { DummyPage, Home, LoginPage, TodoRefreshPage } from '@/router/LazyPages'
-import type { RouteObject } from 'react-router-dom'
 
 const routes: RouteObject[] = [
   {

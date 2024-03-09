@@ -1,6 +1,3 @@
-import { toast } from '@/components/ui/use-toast'
-import { COMMON_MESSAGES, TODO_MESSAGES } from '@/data/messages'
-import type { ToDo } from '@/models/todo'
 import {
   type UseMutationResult,
   useMutation,
@@ -9,6 +6,9 @@ import {
   type UseQueryResult
 } from '@tanstack/react-query'
 import axios, { AxiosError, type AxiosResponse } from 'axios'
+import { toast } from '@/components/ui/use-toast'
+import { COMMON_MESSAGES, TODO_MESSAGES } from '@/data/messages'
+import type { ToDo } from '@/models/todo'
 export const getToDoList = async () => {
   const response = await axios.get<ToDo[]>('http://localhost:8080/todo/lists')
   return response.data

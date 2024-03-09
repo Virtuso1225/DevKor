@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import Nprogress from 'nprogress'
 
-const FalllBack = () => {
+const Fallback = () => {
   useEffect(() => {
     Nprogress.start()
-    return () => {
-      Nprogress.done()
-    }
+    return () => { Nprogress.done() }
   }, [])
   return (
     <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full">
@@ -19,4 +17,4 @@ const FalllBack = () => {
   )
 }
 
-export default FalllBack
+export default Fallback
