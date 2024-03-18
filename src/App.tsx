@@ -1,12 +1,16 @@
 import { useRoutes } from 'react-router-dom'
-import { useAxiosInterceptor } from '@/lib/useAxiosInterceptor'
 import { routes } from '@/router'
-
+import AppWrapper from '@/pages/AppWrapper'
 
 function App() {
   const content = useRoutes(routes)
-  useAxiosInterceptor()
-  return <>{content}</>
+  console.log('App')
+  return (
+    <>
+      <AppWrapper />
+      <>{content}</>
+    </>
+  )
 }
 
 export default App

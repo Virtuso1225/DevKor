@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { deleteTodo, getToDoList, patchTodoCheck, postTodo } from '@/api/hooks/todo'
+import { deleteTodo, getToDoList, patchTodoCheck, postTodo } from '@/api/hooks/toDo'
 import ToDoItem from '@/components/custom/ToDoItem'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useDeleteTodo, useGetToDoList, usePatchTodoCheck, usePostTodo } from '@/api/hooks/todo-refresh-token'
 import ProgressBar from '@/components/custom/ProgressBar'
@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import useEvent from '@/lib/useEvent'
 
-type Status = 'empty' | 'warning';
-const config: Record<Status, { placeholder: string; color: string}> = {
-  'warning': { placeholder: '일을 작성해야합니다!!!', color: '#FF5F57' },
-  "empty": {placeholder: "할 일을 작성해보세요!", color: "#DADADA"}
+type Status = 'empty' | 'warning'
+const config: Record<Status, { placeholder: string; color: string }> = {
+  warning: { placeholder: '일을 작성해야합니다!!!', color: '#FF5F57' },
+  empty: { placeholder: '할 일을 작성해보세요!', color: '#DADADA' }
 }
 
 const TodoRefreshTokenPage = () => {
@@ -19,20 +19,24 @@ const TodoRefreshTokenPage = () => {
   const { mutate: mutateTodo } = usePostTodo()
   const { mutate: mutateCheck } = usePatchTodoCheck()
   const { mutate: mutateDelete } = useDeleteTodo()
-  const [status, setStatus] = useState<Status>('empty');
+  const [status, setStatus] = useState<Status>('empty')
 
-  const progress =
-    list.length > 0 ? Math.floor((list.filter(todo => todo.isChecked).length / list.length) * 100) : 0
+  const progress = list.length > 0 ? Math.floor((list.filter(todo => todo.isChecked).length / list.length) * 100) : 0
 
   const handleAddTodo = useCallback(() => {
     if (newTodo === '') return setStatus('warning')
-    mutateTodo(newTodo, { onSuccess: () => { setNewTodo(''); setStatus('empty') } })
+    mutateTodo(newTodo, {
+      onSuccess: () => {
+        setNewTodo('')
+        setStatus('empty')
+      }
+    })
   }, [newTodo, mutateTodo])
 
   const handleCheck = useEvent((id: number) => {
     const current = list.find(todo => todo.id === id)?.isChecked ?? false
     mutateCheck({ id, isChecked: !current })
-  });
+  })
   const handleDelete = useCallback((id: number) => mutateDelete(id), [mutateDelete])
 
   return (
